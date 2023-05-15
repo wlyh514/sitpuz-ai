@@ -1,0 +1,31 @@
+.guess-display {
+  background-color: rgb(var(--primary-rgb));
+  padding: 0;
+  margin: 0 0 0.5rem 0;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+}
+
+.guess-display:hover {
+  filter: brightness(115%);
+}
+
+.guess-display .result-label {
+  background-color: #4caf50;
+  padding: 0.5rem 0;
+  width: 2.5rem;
+  text-align: center;
+}
+
+.guess-display p {
+  padding: 0.5rem;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .guess-display {
+    margin: 0.5rem 0;
+  }
+}
