@@ -171,7 +171,7 @@ function App() {
                   祝您游戏愉快！
                 </p>
                 <p>
-                  另：当前AI提供的判断准确度欠佳，作者正在试图解决这一问题。如果有相关建议还请赐教。作者GitHub: <a href="https://github.com/wlyh514/sitpuz-ai" >wlyh514</a>
+                  另：当前AI提供的判断准确度欠佳，作者正在试图解决这一问题。如果有相关建议还请赐教。作者GitHub: <a href="https://github.com/wlyh514" target='_blank' rel="noreferrer">wlyh514</a>。<a href="https://github.com/wlyh514/sitpuz-ai" target='_blank' rel="noreferrer">本站代码仓库</a>
                 </p>
               </>
               :
