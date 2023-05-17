@@ -6,7 +6,7 @@ import cors from "cors";
 
 import { GetAllPuzzleRespBody, MakeGuessRespBody } from 'api';
 
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT) || 5000;
 
 const app = express();
 app.use(express.json());
