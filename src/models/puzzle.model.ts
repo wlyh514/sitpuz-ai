@@ -45,11 +45,11 @@ namespace puzzles {
     let result = QueryResult.ERROR; 
     
     switch (resp.data.choices[0].message?.content) {
-      case '0': 
+      case 'TRUE': 
         result = QueryResult.TRUE; break;
-      case '1': 
+      case 'FALSE': 
         result = QueryResult.FALSE; break;
-      case '2': 
+      case 'UNRELATED': 
         result = QueryResult.UNRELATED; break;
       default:
         result = QueryResult.ERROR;
@@ -64,12 +64,12 @@ namespace puzzles {
           }
         ],
         model: "gpt-3.5-turbo",
-        temperature: 0.1,
+        temperature: 0,
         presence_penalty: 0,
         frequency_penalty: 0,
       });
       
-      if (terminationResp.data.choices[0]?.message?.content === "1") {
+      if (terminationResp.data.choices[0]?.message?.content === "TRUE") {
         return QueryResult.GAMEOVER;
       }
     }
