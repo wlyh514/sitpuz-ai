@@ -115,7 +115,7 @@
   }
 
   .guesses-container {
-    height: 100%;
+    flex: 1;
   }
 
   .input-container {
