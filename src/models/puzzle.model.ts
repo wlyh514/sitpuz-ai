@@ -38,7 +38,7 @@ namespace puzzles {
         }
       ],
       model: "gpt-3.5-turbo",
-      temperature: 0,
+      temperature: 0.2,
       presence_penalty: 0,
       frequency_penalty: 0,
     });
@@ -52,10 +52,26 @@ namespace puzzles {
         result = QueryResult.FALSE; break;
       case '2': 
         result = QueryResult.UNRELATED; break;
-      case '4':
-        result = QueryResult.GAMEOVER; break;
       default:
         result = QueryResult.ERROR;
+    }
+    if (result === QueryResult.TRUE) {
+      const terminationResp = await openai.createChatCompletion({
+        messages: [
+          ...prompts.termination_starter as ChatCompletionRequestMessage[],
+          {
+            role: "user", 
+            content: `故事：${puzzle.story}\n陈述：${guess}`
+          }
+        ],
+        model: "gpt-3.5-turbo",
+        temperature: 0.2,
+        presence_penalty: 0,
+        frequency_penalty: 0,
+      });
+      if (terminationResp.data.choices[0]?.message?.content === "1") {
+        return QueryResult.GAMEOVER;
+      }
     }
     return result;
   }
