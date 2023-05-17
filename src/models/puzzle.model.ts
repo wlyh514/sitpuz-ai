@@ -38,7 +38,7 @@ namespace puzzles {
         }
       ],
       model: "gpt-3.5-turbo",
-      temperature: 0.2,
+      temperature: 0,
       presence_penalty: 0,
       frequency_penalty: 0,
     });

@@ -52,6 +52,7 @@ puzzlesController.post("/:puzzleId/guess", async (req, res) => {
       story: result === puzzles.QueryResult.GAMEOVER ? puzzle.story : undefined
     } as MakeGuessRespBody);
   } catch (e) {
+    console.error(e)
     res.json({
       guess: {
         content,
