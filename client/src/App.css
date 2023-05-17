@@ -92,10 +92,12 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
   }
 
   .home-page .header {
-    height: 8%;
+    height: fit-content;
     text-align: center;
   }
   .home-page .header h1 {
@@ -103,20 +105,17 @@
   }
 
   .home-page .main {
-    height: 92%;
+    flex: 1;
+    height: auto;
   }
 
   .select-puzzle {
-    height: 20%;
+    height: 8rem;
     padding: 1rem;
   }
 
-  .puzzle {
-    height: 80%;
-  }
-
   .guesses-container {
-    height: 90%;
+    height: 100%;
   }
 
   .input-container {

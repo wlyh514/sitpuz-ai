@@ -114,7 +114,7 @@ function App() {
     if (!processing) {
       inputRef.current?.focus();
     }
-  }, [currentPuzzle, processing])
+  }, [processing])
 
   return (
   <div className="home-page">
