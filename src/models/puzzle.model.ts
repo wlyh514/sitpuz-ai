@@ -43,7 +43,6 @@ namespace puzzles {
       frequency_penalty: 0,
     });
     let result = QueryResult.ERROR; 
-    console.log(resp.data.choices[0].message?.content)
     
     switch (resp.data.choices[0].message?.content) {
       case '0': 
@@ -65,10 +64,11 @@ namespace puzzles {
           }
         ],
         model: "gpt-3.5-turbo",
-        temperature: 0.2,
+        temperature: 0.1,
         presence_penalty: 0,
         frequency_penalty: 0,
       });
+      
       if (terminationResp.data.choices[0]?.message?.content === "1") {
         return QueryResult.GAMEOVER;
       }
@@ -78,3 +78,30 @@ namespace puzzles {
 }
 
 export default puzzles;
+
+/**
+ * , {
+      "role": "user",
+      "content": "故事：一名男子打嗝，他希望喝一杯水来改善状况。酒保意识到这一点，选择拿枪吓他，男子一紧张之下，打嗝自然消失，因而衷心感谢酒保后就离开了。\n陈述：这名男子打嗝"
+    }, 
+    {
+      "role": "assistant",
+      "content": "0"
+    }, 
+    {
+      "role": "user",
+      "content": "故事：一名男子打嗝，他希望喝一杯水来改善状况。酒保意识到这一点，选择拿枪吓他，男子一紧张之下，打嗝自然消失，因而衷心感谢酒保后就离开了。\n陈述：这名男子被酒保吓到了所以道谢离开"
+    }, 
+    {
+      "role": "assistant",
+      "content": "1"
+    }, 
+    {
+      "role": "user",
+      "content": "故事：一名男子打嗝，他希望喝一杯水来改善状况。酒保意识到这一点，选择拿枪吓他，男子一紧张之下，打嗝自然消失，因而衷心感谢酒保后就离开了。\n陈述：外面天气不好"
+    }, 
+    {
+      "role": "assistant",
+      "content": "2"
+    }
+ */
