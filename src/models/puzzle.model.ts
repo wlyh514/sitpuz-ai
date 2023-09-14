@@ -1,27 +1,27 @@
-import {ChatCompletionRequestMessage, Configuration, OpenAIApi} from "openai";
+import { OpenAI } from "openai";
 import dotenv from "dotenv";
 dotenv.config();
 
 import prompts from "../prompts.json";
+import { ChatCompletionCreateParams, ChatCompletionMessageParam } from "openai/resources/chat";
 
-const opanAiConfig = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_SECRET,
 });
-const openai = new OpenAIApi(opanAiConfig)
 
 namespace puzzles {
   type PuzzleId = number;
   interface Puzzle {
-    id: PuzzleId, 
-    story: string; 
+    id: PuzzleId,
+    story: string;
     lead: string;
   }
   export enum QueryResult {
     TRUE = 0,
-    FALSE = 1, 
-    UNRELATED = 2, 
+    FALSE = 1,
+    UNRELATED = 2,
     GAMEOVER = 4,
-    ERROR = 500, 
+    ERROR = 500,
   }
 
   export const getPuzzle = async (puzzleId: PuzzleId): Promise<Puzzle | null> => prompts.puzzles.find(p => p.id === puzzleId) || null;
@@ -29,47 +29,52 @@ namespace puzzles {
   export const getAllPuzzles = async (): Promise<Puzzle[]> => prompts.puzzles;
 
   export const makeGuess = async (puzzle: Puzzle, guess: string): Promise<QueryResult> => {
-    const resp = await openai.createChatCompletion({
+
+    const resp = await openai.chat.completions.create({
+      model: "gpt-4-0613",
       messages: [
-        ...prompts.starter as ChatCompletionRequestMessage[],
+        ...prompts.starter as ChatCompletionMessageParam[],
         {
-          role: "user", 
+          role: "user",
           content: `故事：${puzzle.story}\n陈述：${guess}`
         }
       ],
-      model: "gpt-3.5-turbo",
       temperature: 0,
       presence_penalty: 0,
       frequency_penalty: 0,
     });
-    let result = QueryResult.ERROR; 
-    
-    switch (resp.data.choices[0].message?.content) {
-      case 'TRUE': 
+    let result = QueryResult.ERROR;
+
+    // console.log(resp.choices[0].message?.content);
+
+    switch (resp.choices[0].message?.content) {
+      case 'TRUE':
         result = QueryResult.TRUE; break;
-      case 'FALSE': 
+      case 'FALSE':
         result = QueryResult.FALSE; break;
-      case 'UNRELATED': 
+      case 'UNRELATED':
         result = QueryResult.UNRELATED; break;
       default:
         result = QueryResult.ERROR;
     }
     if (result === QueryResult.TRUE) {
-      const terminationResp = await openai.createChatCompletion({
+      const terminationResp = await openai.chat.completions.create({
         messages: [
-          ...prompts.termination_starter as ChatCompletionRequestMessage[],
+          ...prompts.termination_starter as ChatCompletionMessageParam[],
           {
-            role: "user", 
+            role: "user",
             content: `故事：${puzzle.story}\n陈述：${guess}`
           }
         ],
-        model: "gpt-3.5-turbo",
+        model: "gpt-4-0613",
         temperature: 0,
         presence_penalty: 0,
         frequency_penalty: 0,
       });
-      
-      if (terminationResp.data.choices[0]?.message?.content === "TRUE") {
+
+      // console.log(terminationResp.choices[0]?.message?.content);
+
+      if (terminationResp.choices[0]?.message?.content?.includes("TRUE")) {
         return QueryResult.GAMEOVER;
       }
     }
@@ -78,30 +83,3 @@ namespace puzzles {
 }
 
 export default puzzles;
-
-/**
- * , {
-      "role": "user",
-      "content": "故事：一名男子打嗝，他希望喝一杯水来改善状况。酒保意识到这一点，选择拿枪吓他，男子一紧张之下，打嗝自然消失，因而衷心感谢酒保后就离开了。\n陈述：这名男子打嗝"
-    }, 
-    {
-      "role": "assistant",
-      "content": "0"
-    }, 
-    {
-      "role": "user",
-      "content": "故事：一名男子打嗝，他希望喝一杯水来改善状况。酒保意识到这一点，选择拿枪吓他，男子一紧张之下，打嗝自然消失，因而衷心感谢酒保后就离开了。\n陈述：这名男子被酒保吓到了所以道谢离开"
-    }, 
-    {
-      "role": "assistant",
-      "content": "1"
-    }, 
-    {
-      "role": "user",
-      "content": "故事：一名男子打嗝，他希望喝一杯水来改善状况。酒保意识到这一点，选择拿枪吓他，男子一紧张之下，打嗝自然消失，因而衷心感谢酒保后就离开了。\n陈述：外面天气不好"
-    }, 
-    {
-      "role": "assistant",
-      "content": "2"
-    }
- */
