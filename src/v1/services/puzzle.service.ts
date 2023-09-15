@@ -1,36 +1,41 @@
 import { OpenAI } from "openai";
-import dotenv from "dotenv";
-dotenv.config();
 
-import prompts from "../prompts.json";
-import { ChatCompletionCreateParams, ChatCompletionMessageParam } from "openai/resources/chat";
+import prompts from "../../prompts.js";
+import { ChatCompletionMessageParam } from "openai/resources/chat/index";
+import { PrismaClient } from "@prisma/client";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_SECRET,
-});
 
-namespace puzzles {
-  type PuzzleId = number;
-  interface Puzzle {
-    id: PuzzleId,
-    story: string;
-    lead: string;
+export type PuzzleId = number;
+export interface Puzzle {
+  id: PuzzleId,
+  story: string;
+  lead: string;
+}
+export enum QueryResult {
+  TRUE = 0,
+  FALSE = 1,
+  UNRELATED = 2,
+  GAMEOVER = 4,
+  ERROR = 500,
+}
+
+class PuzzleService {
+  constructor(
+    private openAI: OpenAI,
+    private prisma: PrismaClient,
+  ) { }
+
+  async getPuzzle(puzzleId: PuzzleId): Promise<Puzzle | null> {
+    return prompts.puzzles.find(p => p.id === puzzleId) || null;
   }
-  export enum QueryResult {
-    TRUE = 0,
-    FALSE = 1,
-    UNRELATED = 2,
-    GAMEOVER = 4,
-    ERROR = 500,
+
+  async getAllPuzzles(): Promise<Puzzle[]> {
+    return prompts.puzzles;
   }
 
-  export const getPuzzle = async (puzzleId: PuzzleId): Promise<Puzzle | null> => prompts.puzzles.find(p => p.id === puzzleId) || null;
+  async makeGuess(puzzle: Puzzle, guess: string): Promise<QueryResult> {
 
-  export const getAllPuzzles = async (): Promise<Puzzle[]> => prompts.puzzles;
-
-  export const makeGuess = async (puzzle: Puzzle, guess: string): Promise<QueryResult> => {
-
-    const resp = await openai.chat.completions.create({
+    const resp = await this.openAI.chat.completions.create({
       model: "gpt-4-0613",
       messages: [
         ...prompts.starter as ChatCompletionMessageParam[],
@@ -58,7 +63,7 @@ namespace puzzles {
         result = QueryResult.ERROR;
     }
     if (result === QueryResult.TRUE) {
-      const terminationResp = await openai.chat.completions.create({
+      const terminationResp = await this.openAI.chat.completions.create({
         messages: [
           ...prompts.termination_starter as ChatCompletionMessageParam[],
           {
@@ -82,4 +87,4 @@ namespace puzzles {
   }
 }
 
-export default puzzles;
+export default PuzzleService;
