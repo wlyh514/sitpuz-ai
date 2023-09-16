@@ -83,7 +83,7 @@ app.on("close", () => {
   prisma.$disconnect();
 });
 
-await initialize({
+const framework = await initialize({
   app,
   apiDoc: apiDoc,
   paths: path.resolve(__dirname, "v1", "paths"),
@@ -92,6 +92,8 @@ await initialize({
   },
   exposeApiDocs: true,
 });
+
+console.log(JSON.stringify(framework.apiDoc))
 
 app.listen(PORT, () => {
   console.log(`sitpuz-ai running on port ${PORT}`);

@@ -13,7 +13,7 @@ declare module "api" {
   }
 
   export interface GetAllPuzzleRespBody {
-    puzzles: { id: PuzzleId, lead: string }[];
+    puzzles: Puzzle[];
   }
 
   export interface MakeGuessRespBody {
