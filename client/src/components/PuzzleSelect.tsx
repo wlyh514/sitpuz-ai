@@ -19,7 +19,7 @@ const PuzzleSelect: React.FC<Props> = ({
     <div className={classnames} id={`puzzle-select-${puzzle.id}`} onClick={onSelect}>
       <h4>
         {
-          puzzle.id === -1 ? "游戏指南": `谜题 #${puzzle.id}`
+          puzzle.id === -1 ? "Player's Guide": `Puzzle #${puzzle.id}`
         }
       </h4>
       <p className="oneline-abbriv">{puzzle.lead }</p>

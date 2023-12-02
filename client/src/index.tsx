@@ -6,7 +6,7 @@ import App from './App';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-document.title = "🤖🐢🍲"
+document.title = "Situation Puzzle with GPT"
 root.render(
   <React.StrictMode>
     <App />

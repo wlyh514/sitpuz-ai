@@ -19,7 +19,7 @@ namespace puzzles {
   export enum QueryResult {
     TRUE = 0,
     FALSE = 1,
-    UNRELATED = 2,
+    IRRELEVANT = 2,
     GAMEOVER = 4,
     ERROR = 500,
   }
@@ -31,12 +31,12 @@ namespace puzzles {
   export const makeGuess = async (puzzle: Puzzle, guess: string): Promise<QueryResult> => {
 
     const resp = await openai.chat.completions.create({
-      model: "gpt-4-0613",
+      model: "gpt-4",
       messages: [
         ...prompts.starter as ChatCompletionMessageParam[],
         {
           role: "user",
-          content: `故事：${puzzle.story}\n陈述：${guess}`
+          content: `Narrative: ${puzzle.story}\nStatement: ${guess}`
         }
       ],
       temperature: 0,
@@ -52,8 +52,8 @@ namespace puzzles {
         result = QueryResult.TRUE; break;
       case 'FALSE':
         result = QueryResult.FALSE; break;
-      case 'UNRELATED':
-        result = QueryResult.UNRELATED; break;
+      case 'IRRELEVANT':
+        result = QueryResult.IRRELEVANT; break;
       default:
         result = QueryResult.ERROR;
     }
@@ -63,10 +63,10 @@ namespace puzzles {
           ...prompts.termination_starter as ChatCompletionMessageParam[],
           {
             role: "user",
-            content: `故事：${puzzle.story}\n陈述：${guess}`
+            content: `Narrative：${puzzle.story}\nStatement：${guess}`
           }
         ],
-        model: "gpt-4-0613",
+        model: "gpt-4",
         temperature: 0,
         presence_penalty: 0,
         frequency_penalty: 0,

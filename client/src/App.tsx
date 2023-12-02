@@ -7,7 +7,7 @@ import GuessDisplay from './components/Guess';
 
 const guide: Puzzle = {
   id: -1,
-  lead: "这是什么？怎么玩？"
+  lead: "What is this? Where do I start? "
 }
 
 const guessCache: Map<PuzzleId, string> = new Map();
@@ -119,7 +119,7 @@ function App() {
   return (
   <div className="home-page">
     <div className='header'>
-      <h1>基于GPT的<a href='https://baike.baidu.com/item/%E6%83%85%E5%A2%83%E7%8C%9C%E8%B0%9C' target='_blank' rel="noreferrer">海龟汤/情境猜谜</a></h1>
+      <h1><a href='https://en.wikipedia.org/wiki/Situation_puzzle' target='_blank' rel="noreferrer">Situation Puzzle </a>Powered by GPT</h1>
     </div>
     
     <div className="row main">
@@ -133,7 +133,7 @@ function App() {
                 selected={currentPuzzle === p} 
                 key={indx}
               />) 
-            : "加载谜题中……"
+            : "Loading puzzles……"
         }
       </div>
 
@@ -141,37 +141,37 @@ function App() {
         <div className="guesses-container">
           {
             currentPuzzle && guesses.length === 0 && currentPuzzle.id >= 0 ? 
-              <p>提交一个推断来开始游戏（例如：“这个人有精神病”）</p>
+              <p>Start by submitting a guess (e.g. "This person is mad.")</p>
               : null
           }
           {
             currentPuzzle?.id === -1 ?
               <>
-                <h1>这是什么？</h1>
+                <h1>What is this?</h1>
                 <p>
-                  情境猜谜（俗称“海龟汤”）是一种以推测出故事全貌为目标的猜谜游戏。在游戏中你将扮演「猜题者」，通过做出一系列推断来试图缩小猜测范围，逐步发掘「故事全貌」的真相。详见<a href="https://baike.baidu.com/item/%E6%83%85%E5%A2%83%E7%8C%9C%E8%B0%9C" target="_blank" rel="noreferrer">百度百科</a>或<a href="https://zh.wikipedia.org/zh-cn/%E6%83%85%E5%A2%83%E7%8C%9C%E8%AC%8E" target="_blank" rel="noreferrer">维基百科</a>。
+                  Situation Puzzle (aka. "yes/no" puzzle, minute mysteries) is a type of game that involves problem-solving. In this game, one player presents a hypothetical situation, often mysterious, odd or seemingly absurd, and other players try to solve the puzzle by making guesses, which can be answered by the presenter with "yes", "no", or "irrelevant." The game continues until a player correctly resolves the situation, usually by distinguishing how and why a certain situation occurred. Read more on <a href="https://en.wikipedia.org/wiki/Situation_puzzle" target="_blank" rel="noreferrer">wikipedia</a>.
                 </p>
-                <h1>怎么玩？</h1>
+                <h1>How to get started?</h1>
                 <p>
-                  您可以通过点击<span className="highlight"><span className="wide-screen-only">左侧</span><span className="narrow-screen-only">上方</span>谜题列表</span>中的项目来切换至该谜题。在谜题界面，您可以通过<span className="highlight">下方文本框</span>输入您对于该谜题的推断(<span className="highlight">请使用陈述句</span>)，按右侧按钮<span className="wide-screen-only">或Enter键</span>提交。提交后，GPT会判断您的推断是否正确。
+                  You can switch to puzzles by clicking items in the <span className="highlight">puzzle list <span className="wide-screen-only">on the left side</span><span className="narrow-screen-only">above</span> </span>. On the puzzles screen, you can enter your declarative guess of the plot in the <span className="highlight">textbox below</span>, use the button on the right <span className="wide-screen-only">or the enter key</span> to submit your guess. After submission, GPT will deduce whether the statement is correct. 
                 </p>
-                <GuessDisplay guess={{result: QueryResult.PENDING, content: "这条推断正在被GPT处理。"}} />
+                <GuessDisplay guess={{result: QueryResult.PENDING, content: "This statement is being processed by GPT."}} />
                 <p>
-                  推断经过处理后，会得到以下结果中的一种：
+                  A statement after being processed yields one of the following:
                 </p>
-                <GuessDisplay guess={{result: QueryResult.TRUE, content: "这条推断与故事相符，但不是故事的全貌。"}} />
-                <GuessDisplay guess={{result: QueryResult.FALSE, content: "这条推断与故事不符。"}} />
-                <GuessDisplay guess={{result: QueryResult.UNRELATED, content: "这条推断与故事无明显关联。"}} />
-                <GuessDisplay guess={{result: QueryResult.ERROR, content: "处理这条推断导致了某种技术错误，怎么回事呢？"}} />
+                <GuessDisplay guess={{result: QueryResult.TRUE, content: "This statement matches with the narrative, but does not capture everything. "}} />
+                <GuessDisplay guess={{result: QueryResult.FALSE, content: "This statement contradicts with the narrative."}} />
+                <GuessDisplay guess={{result: QueryResult.UNRELATED, content: "This statement is irrelevant. "}} />
+                <GuessDisplay guess={{result: QueryResult.ERROR, content: "An error occured processing this statement. Not my fault I guess.  "}} />
                 <p>
-                  收集到足够的信息后，您可以在推断中写出您对于故事全貌的推测。
+                  After gathering enough information, you can attempt to summerize the entirety of the plot. 
                 </p>
-                <GuessDisplay guess={{result: QueryResult.GAMEOVER, content: "这条推断完整地描述了故事全貌。您赢了！"}} />
+                <GuessDisplay guess={{result: QueryResult.GAMEOVER, content: "This statement captures the whole plot. You win!"}} />
                 <p>
-                  祝您游戏愉快！
+                  Happy gaming!
                 </p>
                 <p>
-                  另：当前AI提供的判断准确度欠佳，作者正在试图解决这一问题。如果有相关建议还请赐教。作者GitHub: <a href="https://github.com/wlyh514" target='_blank' rel="noreferrer">wlyh514</a>。<a href="https://github.com/wlyh514/sitpuz-ai" target='_blank' rel="noreferrer">本站代码仓库</a>
+                  Author's Github profile: <a href="https://github.com/wlyh514" target='_blank' rel="noreferrer">wlyh514</a>; <a href="https://github.com/wlyh514/sitpuz-ai" target='_blank' rel="noreferrer">repository of this site. </a>
                 </p>
               </>
               :
@@ -180,8 +180,8 @@ function App() {
           {
             currentPuzzle && fullStory ? 
               <>
-                <h1>您赢了</h1>
-                <p>故事全文：{fullStory} <a onClick={restart}><b>重新开始</b></a></p>
+                <h1>You win!</h1>
+                <p>The entire plot: {fullStory} <a onClick={restart}><b>Restart</b></a></p>
               </>
               :
               null
@@ -198,7 +198,7 @@ function App() {
             autoComplete="off" 
             name="guess" 
             id="guess" 
-            placeholder='写下你的推断' 
+            placeholder='Place your guess here' 
             onChange={onInputChange}
             onKeyDown={handleEnterKeydown}
             value={guess}
